@@ -46,7 +46,14 @@ Das Programm prüft die Umgebung und richtet fehlende Teile ein, wenn du zustimm
 Du bekommst eine lange Zeile, die mit `GWSC1.` beginnt. Sie kommt über einen
 Passwortmanager, nicht per Mail.
 
-Im Programm nach dem Code gefragt → einfügen → Enter.
+Beim ersten Start fragt das Programm von selbst danach: **Einrichtungs-Code:** →
+einfügen → Enter. Später jederzeit über Menüpunkt **6 (Einrichtungs-Code eingeben)**.
+
+Im Terminal geht es auch direkt:
+
+```bash
+node bin/gws-connect.mjs setup
+```
 
 - **Der Code ist wie ein Passwort.** Nicht weiterschicken, nicht in einen Chat kopieren.
 - Nach dem Einfügen wird er nicht gespeichert; er ist verbraucht.

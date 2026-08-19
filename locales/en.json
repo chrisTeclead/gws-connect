@@ -32,7 +32,9 @@
     "guide": "Guide",
     "lang": "Sprache / language",
     "unknown_choice": "Unknown choice.",
-    "yes_flag": "--yes: ask nothing, take the defaults (for scripts)"
+    "yes_flag": "--yes: ask nothing, take the defaults (for scripts)",
+    "setup": "Enter the setup code",
+    "setup_hint": "one-time, no account can be connected without it"
   },
   "setup": {
     "title": "Setup",

@@ -93,7 +93,8 @@ You have not entered the setup code yet. Without it no account can be connected.
 gws-connect setup
 ```
 
-Or start the menu; it asks by itself the first time.
+Or pick menu item **6 (Enter the setup code)**. On the very first start the program
+asks by itself anyway.
 
 ---
 

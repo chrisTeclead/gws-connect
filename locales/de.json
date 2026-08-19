@@ -31,7 +31,9 @@
     "guide": "Anleitung",
     "lang": "Sprache / language",
     "unknown_choice": "Unbekannte Auswahl.",
-    "yes_flag": "--yes: nichts fragen, Vorgaben nehmen (fuer Skripte)"
+    "yes_flag": "--yes: nichts fragen, Vorgaben nehmen (fuer Skripte)",
+    "setup": "Einrichtungs-Code eingeben",
+    "setup_hint": "einmalig, ohne das kann kein Konto verbunden werden"
   },
   "setup": {
     "title": "Einrichtung",

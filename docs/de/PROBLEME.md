@@ -97,7 +97,8 @@ werden.
 gws-connect setup
 ```
 
-Oder im Menü starten, es fragt beim ersten Mal von selbst.
+Oder im Menü Punkt **6 (Einrichtungs-Code eingeben)** wählen. Beim allerersten Start
+fragt das Programm ohnehin von selbst danach.
 
 ---
 

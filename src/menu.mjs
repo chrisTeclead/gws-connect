@@ -1,6 +1,7 @@
 import { t, initI18n, setLang, detectLang, LANGS } from './core/i18n.mjs'
 import * as ui from './core/ui.mjs'
 import * as accounts from './core/accounts.mjs'
+import * as credsets from './core/credsets.mjs'
 import { staleAccounts } from './core/staleness.mjs'
 import { setupCommand } from './commands/setup.mjs'
 import { addCommand } from './commands/add.mjs'
@@ -51,49 +52,77 @@ async function staleNag () {
   }
 }
 
+// True on a machine that has never imported credentials. Without them no
+// account can be connected, so the menu asks for the code before anything else
+// rather than letting the user hit a refusal on "add account".
+export async function needsSetup () {
+  return (await credsets.list()).length === 0
+}
+
+async function switchLanguage () {
+  const lang = await ui.choose(t('menu.lang'), LANGS.map(l => ({ value: l, label: l })))
+  await setLang(lang)
+  await initI18n(lang)
+}
+
+// The menu as data, so its contents can be asserted in a test instead of only
+// being visible to someone running it by hand.
+export function menuItems () {
+  return [
+    { key: '1', label: t('menu.add'), run: () => addCommand({}) },
+    { key: '2', label: t('menu.list'), run: () => listCommand() },
+    { key: '3', label: t('menu.verify'), run: () => verifyCommand({}) },
+    { key: '4', label: t('menu.remove'), run: () => removeCommand({}) },
+    { key: '5', label: t('menu.doctor'), run: () => doctorCommand({}) },
+    { key: '6', label: t('menu.setup'), hint: t('menu.setup_hint'), run: () => setupCommand({}) },
+    { key: '7', label: t('menu.credsets'), hint: t('menu.credsets_hint'), run: () => credsetsCommand({}) },
+    { key: '8', label: t('menu.lang'), run: switchLanguage, quiet: true }
+  ]
+}
+
 export async function menu () {
+  // First run: no credentials at all. Ask for the setup code straight away.
+  if (await needsSetup()) {
+    ui.clear()
+    ui.title(t('menu.title'))
+    await setupCommand({})
+    await ui.pause()
+  }
+
   for (;;) {
     ui.clear()
     ui.title(t('menu.title'))
     await staleNag()
 
-    ui.line(`  1  ${t('menu.add')}`)
-    ui.line(`  2  ${t('menu.list')}`)
-    ui.line(`  3  ${t('menu.verify')}`)
-    ui.line(`  4  ${t('menu.remove')}`)
-    ui.line(`  5  ${t('menu.doctor')}`)
-    ui.line(`  6  ${t('menu.credsets')}`)
-    ui.dim(`${t('menu.credsets_hint')}`)
-    ui.line(`  7  ${t('menu.lang')}`)
+    const items = menuItems()
+    for (const item of items) {
+      ui.line(`  ${item.key}  ${item.label}`)
+      if (item.hint) ui.dim(item.hint)
+    }
     ui.line(`  q  ${t('common.quit')}`)
     ui.blank()
 
     const choice = (await ui.ask(t('common.choice'))).toLowerCase()
     ui.blank()
 
-    switch (choice) {
-      case '1': await addCommand({}); await ui.pause(); break
-      case '2': await listCommand(); await ui.pause(); break
-      case '3': await verifyCommand({}); await ui.pause(); break
-      case '4': await removeCommand({}); await ui.pause(); break
-      case '5': await doctorCommand({}); await ui.pause(); break
-      case '6': await credsetsCommand({}); await ui.pause(); break
-      case '7': {
-        const lang = await ui.choose(t('menu.lang'), LANGS.map(l => ({ value: l, label: l })))
-        await setLang(lang)
-        await initI18n(lang)
-        break
-      }
-      case 'q': return
-      default: ui.warn(t('menu.unknown_choice')); await ui.pause()
+    if (choice === 'q') return
+
+    const item = items.find(i => i.key === choice)
+    if (!item) {
+      ui.warn(t('menu.unknown_choice'))
+      await ui.pause()
+      continue
     }
+    await item.run()
+    if (!item.quiet) await ui.pause()
   }
 }
 
 function help () {
   ui.title(t('menu.title'))
   ui.line(`  gws-connect                       ${t('menu.title')}`)
-  ui.line(`  gws-connect setup --code <code>   ${t('setup.title')}`)
+  ui.line(`  gws-connect setup                 ${t('menu.setup')}`)
+  ui.line(`  gws-connect setup --code <code>   ${t('menu.setup')}`)
   ui.line(`  gws-connect add <email>           ${t('menu.add')}`)
   ui.line(`  gws-connect list                  ${t('menu.list')}`)
   ui.line(`  gws-connect verify [<email>]      ${t('menu.verify')}`)

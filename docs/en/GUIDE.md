@@ -45,7 +45,14 @@ The program checks your environment and sets up what is missing, if you agree.
 You will receive a long line starting with `GWSC1.`. It comes through a password manager,
 not by email.
 
-When the program asks for the code → paste → Enter.
+On the first start the program asks by itself: **Setup code:** → paste → Enter.
+Later, any time, via menu item **6 (Enter the setup code)**.
+
+From a terminal it also works directly:
+
+```bash
+node bin/gws-connect.mjs setup
+```
 
 - **The code is like a password.** Do not forward it, do not paste it into a chat.
 - After importing, it is not stored; it is used up.
