@@ -1,0 +1,4 @@
+node_modules/
+*.setupcode
+secrets.dat
+.DS_Store
