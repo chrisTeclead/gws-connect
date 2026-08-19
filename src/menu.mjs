@@ -102,7 +102,7 @@ function help () {
   ui.line(`  gws-connect credentials           ${t('menu.credsets')}`)
   ui.line(`  gws-connect --lang de|en          ${t('menu.lang')}`)
   ui.blank()
-  ui.dim('--yes: ask nothing, take the defaults (for scripts)')
+  ui.dim(t('menu.yes_flag'))
 }
 
 export async function main (argv) {

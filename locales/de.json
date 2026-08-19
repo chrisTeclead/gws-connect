@@ -1,5 +1,7 @@
 {
-  "test": { "interpolate": "Hallo {name}" },
+  "test": {
+    "interpolate": "Hallo {name}"
+  },
   "common": {
     "yes": "ja",
     "no": "nein",
@@ -28,7 +30,8 @@
     "credsets_hint": "Sonderfall - nur wenn ein Administrator die App sperrt",
     "guide": "Anleitung",
     "lang": "Sprache / language",
-    "unknown_choice": "Unbekannte Auswahl."
+    "unknown_choice": "Unbekannte Auswahl.",
+    "yes_flag": "--yes: nichts fragen, Vorgaben nehmen (fuer Skripte)"
   },
   "setup": {
     "title": "Einrichtung",

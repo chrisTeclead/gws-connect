@@ -10,6 +10,6 @@
   },
   "files": ["bin", "src", "locales", "skills", "docs"],
   "scripts": {
-    "test": "node --test tests/"
+    "test": "node --test \"tests/**/*.test.mjs\""
   }
 }

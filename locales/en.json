@@ -1,5 +1,8 @@
 {
-  "test": { "interpolate": "Hello {name}", "enOnly": "English only" },
+  "test": {
+    "interpolate": "Hello {name}",
+    "enOnly": "English only"
+  },
   "common": {
     "yes": "yes",
     "no": "no",
@@ -28,7 +31,8 @@
     "credsets_hint": "Special case - only if an administrator blocks the app",
     "guide": "Guide",
     "lang": "Sprache / language",
-    "unknown_choice": "Unknown choice."
+    "unknown_choice": "Unknown choice.",
+    "yes_flag": "--yes: ask nothing, take the defaults (for scripts)"
   },
   "setup": {
     "title": "Setup",
