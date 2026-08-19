@@ -3,6 +3,7 @@ import { platform } from '../paths.mjs'
 export async function backend () {
   const forced = (process.env.GWS_CONNECT_SECRETS || '').toLowerCase()
   if (forced === 'memory') return (await import('./memory.mjs')).default
+  if (forced === 'file') return (await import('./file.mjs')).default
   if (forced === 'macos') return (await import('./macos.mjs')).default
   if (forced === 'windows') return (await import('./windows.mjs')).default
 
