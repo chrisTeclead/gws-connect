@@ -53,3 +53,20 @@ test('the payload carries the tool but never the operator tooling or state', () 
   assert.ok(!files.PAYLOAD.includes('tests'))
   assert.ok(!files.PAYLOAD.includes('.git'))
 })
+
+test('CLAUDE.md hands the user a real terminal window on Windows', () => {
+  const md = files.claudeMd('win-x64')
+  assert.ok(md.includes('start "" cmd /c START-HIER.cmd'), 'must open the starter in its own window')
+})
+
+test('CLAUDE.md hands the user a real terminal window on macOS', () => {
+  const md = files.claudeMd('mac-arm64')
+  assert.ok(md.includes('open START-HIER.command'), 'must open the starter in its own window')
+})
+
+test('the terminal window is offered for the code prompt, not for the doctor', () => {
+  const md = files.claudeMd('win-x64')
+  const openAt = md.indexOf('start "" cmd /c START-HIER.cmd')
+  const codeAt = md.indexOf('## The setup code')
+  assert.ok(openAt > codeAt, 'the window belongs with the step that needs a keyboard')
+})

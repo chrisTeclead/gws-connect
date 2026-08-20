@@ -71,6 +71,12 @@ export function claudeMd (platform) {
   const gws = win ? 'runtime\\gws\\gws.exe' : 'runtime/gws/gws'
   const starterFile = starterName(platform)
   const trouble = 'docs/de/PROBLEME.md (deutsch) / docs/en/TROUBLESHOOTING.md (English)'
+  // The setup prompt needs a keyboard, and you do not have one. Handing the
+  // user a window beats handing them an instruction to go find a file.
+  const openStarter = win ? 'start "" cmd /c START-HIER.cmd' : 'open START-HIER.command'
+  const paste = win
+    ? 'right-click pastes in that kind of window, Ctrl+V works on Windows 11'
+    : 'Cmd+V'
 
   return `# gws-connect — instructions for Claude Code
 
@@ -108,12 +114,22 @@ Add \`--lang de\` or \`--lang en\` to match the language the user is writing in.
 ## The setup code
 
 Step 2 asks for a setup code. The user received it separately, through a
-password manager. Ask them to paste it at the prompt.
+password manager.
 
-The code is the secret itself. Never write it to a file, never echo it back,
-never put it in a command line or a log, and never store it anywhere in this
-folder. If the user pastes it into the chat instead of the prompt, tell them
-plainly that it should be rotated.
+You cannot type it for them, and you must not try: the code is the secret
+itself. Never write it to a file, never echo it back, never put it on a command
+line or in a log, and never store it anywhere in this folder. If the user pastes
+it into the chat instead of the prompt, tell them plainly that it should be
+rotated.
+
+What you SHOULD do is give them the prompt without making them hunt for it.
+Open the starter in a terminal window of its own:
+
+    ${openStarter}
+
+A window appears asking for the setup code. Tell the user to paste it there —
+${paste} — and press Enter. Then stay available: once the code is in, they can
+come back and you can carry on with step 3.
 
 ## When something fails
 
