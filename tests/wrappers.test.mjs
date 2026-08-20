@@ -78,3 +78,39 @@ test('the runner exits non-zero for an unknown account', async () => {
   assert.notEqual(r.status, 0)
   await box.cleanup()
 })
+
+test('a wrapper pins the bundled gws when one is in use', async () => {
+  const box = await sandbox({})
+  process.env.GWS_CONNECT_PLATFORM = 'win32'
+  const bin = String.raw`C:\bundle\runtime\gws\gws.exe`
+  process.env.GWS_CONNECT_GWS_BIN = bin
+  const w = await load()
+  const body = await fs.readFile(await w.write('anna-a-de'), 'utf8')
+  assert.ok(body.includes(`set "GWS_CONNECT_GWS_BIN=${bin}"`), body)
+  delete process.env.GWS_CONNECT_GWS_BIN
+  delete process.env.GWS_CONNECT_PLATFORM
+  await box.cleanup()
+})
+
+test('a POSIX wrapper exports the bundled gws when one is in use', async () => {
+  const box = await sandbox({})
+  process.env.GWS_CONNECT_PLATFORM = 'darwin'
+  process.env.GWS_CONNECT_GWS_BIN = '/bundle/runtime/gws/gws'
+  const w = await load()
+  const body = await fs.readFile(await w.write('a-b-de'), 'utf8')
+  assert.match(body, /^export GWS_CONNECT_GWS_BIN="\/bundle\/runtime\/gws\/gws"$/m)
+  delete process.env.GWS_CONNECT_GWS_BIN
+  delete process.env.GWS_CONNECT_PLATFORM
+  await box.cleanup()
+})
+
+test('a wrapper stays clean when gws comes from the PATH', async () => {
+  const box = await sandbox({})
+  process.env.GWS_CONNECT_PLATFORM = 'darwin'
+  delete process.env.GWS_CONNECT_GWS_BIN
+  const w = await load()
+  const body = await fs.readFile(await w.write('c-d-de'), 'utf8')
+  assert.ok(!body.includes('GWS_CONNECT_GWS_BIN'))
+  delete process.env.GWS_CONNECT_PLATFORM
+  await box.cleanup()
+})

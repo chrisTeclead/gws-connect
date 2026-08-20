@@ -2,3 +2,5 @@ node_modules/
 *.setupcode
 secrets.dat
 .DS_Store
+dist/
+.bundle-cache/
