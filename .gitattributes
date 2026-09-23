@@ -1,0 +1,2 @@
+# Shell scripts run on macOS; a CRLF checkout on Windows must not reach a release.
+*.sh text eol=lf
