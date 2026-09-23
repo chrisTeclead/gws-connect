@@ -39,7 +39,9 @@ try {
   if ((Install 'http://127.0.0.1:8765') -ne 0) { throw 'update failed' }
   if ([IO.File]::ReadAllText((Join-Path $acct 'meta.json')) -ne $meta) { throw 'account changed by update' }
   $wrapper = Get-Content -Raw (Join-Path $env:GWS_CONNECT_HOME 'bin\gws-anna-a-de.cmd')
-  if (-not $wrapper.Contains((Join-Path $env:GWS_CONNECT_HOME 'app\runtime\node\node.exe'))) { throw 'wrapper not relinked' }
+  # Relative to the wrapper on purpose: cmd.exe would garble an absolute path
+  # through a user name like "Anna Müller".
+  if (-not $wrapper.Contains('"%~dp0..\app\runtime\node\node.exe"')) { throw "wrapper not relinked: $wrapper" }
 
   Write-Host '--- tampered zip is refused and the app survives'
   $marker = Join-Path $env:GWS_CONNECT_HOME 'app\.marker'

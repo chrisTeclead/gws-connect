@@ -1,6 +1,6 @@
 {
   "name": "gws-connect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Connect any number of Google accounts to the Google Workspace CLI, read-only, one isolated store per account.",
   "type": "module",
   "license": "MIT",
