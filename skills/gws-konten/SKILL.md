@@ -60,7 +60,7 @@ The wrapper pins that one account. It cannot accidentally answer for another.
 ## Connect another account
 
 If the user wants one more account, use the installed launcher — macOS
-`~/.gws-connect/gws-connect`, Windows `%USERPROFILE%\.gws-connect\gws-connect.cmd`:
+`~/.gws-connect/gws-connect`, Windows `~/.gws-connect/gws-connect.cmd` (as written, in Git Bash or PowerShell):
 
     <launcher> add <address> --yes
 

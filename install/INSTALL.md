@@ -14,7 +14,7 @@ Run the one line for their system:
 - **macOS:**
   `curl -fsSL https://github.com/chrisTeclead/gws-connect/releases/latest/download/install.sh | bash`
 - **Windows:**
-  `powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://github.com/chrisTeclead/gws-connect/releases/latest/download/install.ps1 | iex"`
+  `powershell -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072; irm https://github.com/chrisTeclead/gws-connect/releases/latest/download/install.ps1 | iex"`
 
 It needs no administrator rights and ends with a line starting `installed`.
 Running it again later is how you update; connected accounts are kept.
@@ -26,7 +26,8 @@ reason it printed and stop.
 From here on use only the launcher:
 
 - macOS: `~/.gws-connect/gws-connect`
-- Windows: `%USERPROFILE%\.gws-connect\gws-connect.cmd`
+- Windows: `~/.gws-connect/gws-connect.cmd` (works as written in Git Bash and
+  in PowerShell)
 
 Add `--lang de` or `--lang en` to every call, matching the user's language.
 
@@ -53,7 +54,10 @@ the setup code. Paste it from your password manager and click OK."
 - **Exit code 3:** no window could be shown. Open the launcher in a terminal
   window of its own instead; it asks for the code first:
   - macOS: `open -a Terminal ~/.gws-connect/gws-connect`
-  - Windows: `start "" "%USERPROFILE%\.gws-connect\gws-connect.cmd"`
+  - Windows, from PowerShell:
+    `Start-Process "$env:USERPROFILE\.gws-connect\gws-connect.cmd"`
+  - Windows, from Git Bash:
+    `powershell.exe -NoProfile -Command 'Start-Process "$env:USERPROFILE\.gws-connect\gws-connect.cmd"'`
 
   Tell the user to paste the code there (macOS: Cmd+V; Windows: right-click)
   and press Enter, then close that window and come back.

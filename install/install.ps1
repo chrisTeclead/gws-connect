@@ -1,5 +1,9 @@
 # gws-connect installer for Windows. Meant to be run by Claude Code:
-#   powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://github.com/chrisTeclead/gws-connect/releases/latest/download/install.ps1 | iex"
+#   powershell -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072; irm https://github.com/chrisTeclead/gws-connect/releases/latest/download/install.ps1 | iex"
+#
+# 3072 is TLS 1.2. It has to be switched on before that first irm - on an older
+# Windows PowerShell 5.1 GitHub refuses the default - so the line below only
+# covers someone who fetched this file another way.
 #
 # Invoke-WebRequest sets no Mark of the Web, so nothing here meets SmartScreen.
 # Everything lands in ~/.gws-connect/app; accounts and credentials are never

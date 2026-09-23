@@ -52,6 +52,15 @@ test('install.ps1 refuses ARM Windows and enables TLS 1.2 before downloading', (
   assert.ok(tls !== -1 && tls < firstDownload, 'PowerShell 5.1 needs TLS 1.2 switched on first')
 })
 
+test('the Windows one-liner switches on TLS 1.2 before its own first download', () => {
+  // The line inside install.ps1 runs only after `irm` has already fetched it.
+  const line = ps1.split('\n').find(l => /^#\s+powershell/.test(l))
+  assert.ok(line, 'install.ps1 header names its one-liner')
+  const tls = line.indexOf('SecurityProtocol')
+  const irm = line.indexOf('irm ')
+  assert.ok(tls !== -1 && tls < irm, line)
+})
+
 test('install.ps1 never exits the caller\'s shell', () => {
   // A user who pasted it into their own PowerShell window would lose it.
   assert.ok(!/^\s*exit\b/m.test(ps1))

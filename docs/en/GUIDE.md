@@ -88,8 +88,9 @@ account under `bin/`; Claude uses it to read in that one account.
 Just ask Claude about your mail, files and appointments.
 
 The menu with the overview, the access check and "Remove an account" starts with
-`~/.gws-connect/gws-connect` (Mac) or `%USERPROFILE%\.gws-connect\gws-connect.cmd`
-(Windows) — or ask Claude to open it.
+`~/.gws-connect/gws-connect` in Terminal (Mac), or by double-clicking
+`gws-connect.cmd` in the `.gws-connect` folder of your user folder (Windows) — or
+ask Claude to open it.
 
 ---
 
@@ -104,9 +105,11 @@ Paste the same sentence from step 1 into Claude again. Your accounts are kept.
 Open **Terminal** (Mac) or **PowerShell** (Windows), paste the one line for
 your system from
 [INSTALL.md](https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md),
-press Enter. Then start `~/.gws-connect/gws-connect` (Mac) or
-`%USERPROFILE%\.gws-connect\gws-connect.cmd` (Windows) — the menu asks for the
-setup code first.
+press Enter. Then, in the same window, start the menu — it asks for the setup code
+first:
+
+- Mac: `~/.gws-connect/gws-connect`
+- Windows: `& "$env:USERPROFILE\.gws-connect\gws-connect.cmd"`
 
 ---
 

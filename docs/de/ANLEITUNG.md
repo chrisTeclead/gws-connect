@@ -90,8 +90,9 @@ einen Befehl unter `bin/`; Claude nutzt ihn, um in genau diesem Konto zu lesen.
 Frag Claude einfach nach deinen Mails, Dateien und Terminen.
 
 Das Menü mit Übersicht, Zugangsprüfung und „Konto entfernen" startest du mit
-`~/.gws-connect/gws-connect` (Mac) bzw. `%USERPROFILE%\.gws-connect\gws-connect.cmd`
-(Windows) — oder du bittest Claude darum.
+`~/.gws-connect/gws-connect` im Terminal (Mac) bzw. per Doppelklick auf
+`gws-connect.cmd` im Ordner `.gws-connect` deines Benutzerordners (Windows) — oder du
+bittest Claude darum.
 
 ---
 
@@ -107,9 +108,11 @@ erhalten.
 Öffne **Terminal** (Mac) bzw. **PowerShell** (Windows), füge die eine Zeile für dein
 System aus
 [INSTALL.md](https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md)
-ein und drücke Enter. Starte danach `~/.gws-connect/gws-connect` (Mac) bzw.
-`%USERPROFILE%\.gws-connect\gws-connect.cmd` (Windows) — das Menü fragt zuerst nach dem
-Einrichtungs-Code.
+ein und drücke Enter. Starte danach im selben Fenster das Menü — es fragt zuerst nach
+dem Einrichtungs-Code:
+
+- Mac: `~/.gws-connect/gws-connect`
+- Windows: `& "$env:USERPROFILE\.gws-connect\gws-connect.cmd"`
 
 ---
 

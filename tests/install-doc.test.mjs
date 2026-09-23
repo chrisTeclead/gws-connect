@@ -27,6 +27,25 @@ test('INSTALL.md walks the fixed order with the fixed launcher', () => {
   assert.ok(doc.includes('gws-connect.cmd'))
 })
 
+// Claude Code on Windows runs Git Bash or PowerShell. Neither expands
+// %USERPROFILE%, and `start ""` breaks under both.
+const WIN_LAUNCHER_PS = 'Start-Process "$env:USERPROFILE\\.gws-connect\\gws-connect.cmd"'
+
+test('INSTALL.md gives Windows commands that work in Git Bash and PowerShell', () => {
+  assert.ok(doc.includes('~/.gws-connect/gws-connect.cmd'), 'Git Bash and PowerShell both accept this form')
+  assert.ok(doc.includes(WIN_LAUNCHER_PS), 'window fallback for PowerShell')
+  assert.ok(doc.includes(`powershell.exe -NoProfile -Command '${WIN_LAUNCHER_PS}'`), 'window fallback from Git Bash')
+  assert.ok(!doc.includes('%USERPROFILE%'))
+  assert.ok(!doc.includes('start ""'))
+})
+
+test('guides and skill name Windows paths a PowerShell window understands', async () => {
+  for (const f of ['../docs/en/GUIDE.md', '../docs/de/ANLEITUNG.md', '../skills/gws-konten/SKILL.md']) {
+    const body = await fs.readFile(new URL(f, import.meta.url), 'utf8')
+    assert.ok(!body.includes('%USERPROFILE%'), `${f} still names %USERPROFILE%`)
+  }
+})
+
 test('INSTALL.md forbids other installers and guards the code', () => {
   assert.match(doc, /npm/)
   assert.match(doc, /brew/)
