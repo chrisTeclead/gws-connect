@@ -14,6 +14,7 @@ import { extractOne } from './bundle/extract.mjs'
 import { collectPayload, bundleEntries, bundleName } from './bundle/assemble.mjs'
 import { PAYLOAD } from './bundle/files.mjs'
 import { zip } from './bundle/zip.mjs'
+import { sha256Listing } from './bundle/checksums.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 
@@ -128,6 +129,14 @@ async function main () {
 
   const built = []
   for (const platform of wanted) built.push(await build(platform, options))
+
+  // Covers every bundle in the output folder, not only this run's, so building
+  // one platform at a time still ends with a complete listing.
+  const outDir = path.resolve(root, options.out)
+  const zips = (await fs.readdir(outDir)).filter(n => /^gws-connect-.*\.zip$/.test(n))
+  const files = await Promise.all(zips.map(async name => ({ name, data: await fs.readFile(path.join(outDir, name)) })))
+  await fs.writeFile(path.join(outDir, 'SHA256SUMS'), sha256Listing(files))
+  say(`  ${path.join(outDir, 'SHA256SUMS')}`)
 
   say(`\ndone: ${built.length} bundle(s)`)
   say('The setup code travels separately, through a password manager.')

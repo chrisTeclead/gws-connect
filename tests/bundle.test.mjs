@@ -37,3 +37,17 @@ test('ARM Windows is refused with the reason, not a guess', () => {
 test('an unknown platform lists the ones that exist', () => {
   assert.throws(() => targets.resolveTarget('atari'), /win-x64/)
 })
+
+test('an Intel Mac target uses the x86_64 darwin builds', () => {
+  const t = targets.resolveTarget('mac-x64')
+  assert.match(t.node.url, /node-v.*-darwin-x64\.tar\.gz$/)
+  assert.equal(t.node.entry, `node-v${targets.NODE_VERSION}-darwin-x64/bin/node`)
+  assert.equal(t.node.dest, 'runtime/node/bin/node')
+  assert.match(t.gws.url, /google-workspace-cli-x86_64-apple-darwin\.tar\.gz$/)
+  assert.equal(t.gws.dest, 'runtime/gws/gws')
+  assert.equal(t.mode, 0o755)
+})
+
+test('--all builds every Mac, Intel included', () => {
+  assert.deepEqual(targets.platforms(), ['win-x64', 'mac-arm64', 'mac-x64'])
+})

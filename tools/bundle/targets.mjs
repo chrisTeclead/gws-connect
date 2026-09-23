@@ -23,6 +23,15 @@ const PLATFORMS = {
     gwsArtifact: 'google-workspace-cli-aarch64-apple-darwin.tar.gz',
     gwsBinary: 'gws',
     mode: 0o755
+  },
+  // Intel Macs are still common on desks that get a hand-me-down laptop.
+  'mac-x64': {
+    nodeArch: 'darwin-x64',
+    nodeArchive: 'tar.gz',
+    nodeEntry: 'bin/node',
+    gwsArtifact: 'google-workspace-cli-x86_64-apple-darwin.tar.gz',
+    gwsBinary: 'gws',
+    mode: 0o755
   }
 }
 
