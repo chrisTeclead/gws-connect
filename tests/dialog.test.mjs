@@ -48,12 +48,14 @@ test('classify: exit 0 is the answer, trimmed', () => {
 
 test('classify: user cancel is recognised on both systems', () => {
   assert.deepEqual(dialog.classify('darwin', { status: 1, stdout: '', stderr: 'execution error: User canceled. (-128)' }), { status: 'cancel' })
-  assert.deepEqual(dialog.classify('win32', { status: 1, stdout: '', stderr: '' }), { status: 'cancel' })
+  assert.deepEqual(dialog.classify('win32', { status: 2, stdout: '', stderr: '' }), { status: 'cancel' })
 })
 
 test('classify: anything else means no dialog could be shown', () => {
   assert.deepEqual(dialog.classify('darwin', { status: 1, stdout: '', stderr: 'no user interaction allowed (-1713)' }), { status: 'unavailable' })
   assert.deepEqual(dialog.classify('win32', { error: new Error('ENOENT') }), { status: 'unavailable' })
+  // PowerShell exits 1 on any script error - blocked Add-Type, no desktop.
+  assert.deepEqual(dialog.classify('win32', { status: 1, stdout: '', stderr: 'Add-Type : blocked' }), { status: 'unavailable' })
 })
 
 test('askDialog runs the built command and classifies its result', async () => {
@@ -69,4 +71,14 @@ test('askDialog runs the built command and classifies its result', async () => {
 test('askDialog on a platform without a dialog never runs anything', async () => {
   const r = await dialog.askDialog(TEXTS, { platform: 'linux', run: async () => { throw new Error('ran') } })
   assert.deepEqual(r, { status: 'unavailable' })
+})
+
+test('the Windows script tells cancel (2) from failure (3)', () => {
+  const script = decodePs(dialog.dialogCommand('win32', TEXTS).args)
+  assert.match(script, /exit 2/)
+  assert.match(script, /catch \{ exit 3 \}/)
+})
+
+test('the dialog process is not started hidden, or Windows hides the form too', () => {
+  assert.equal(dialog.SPAWN_OPTIONS.windowsHide, false)
 })

@@ -14,8 +14,11 @@ function macScript ({ title, prompt, ok, cancel }) {
     `default button ${apple(ok)} cancel button ${apple(cancel)})`
 }
 
+// Exit codes: 0 answer, 2 cancel, 3 no dialog. PowerShell itself exits 1 on
+// an uncaught error, so 1 must never mean "the user said no".
 function windowsScript ({ title, prompt, ok, cancel }) {
   return [
+    'try {',
     'Add-Type -AssemblyName System.Windows.Forms',
     'Add-Type -AssemblyName System.Drawing',
     '[System.Windows.Forms.Application]::EnableVisualStyles()',
@@ -45,7 +48,9 @@ function windowsScript ({ title, prompt, ok, cancel }) {
     '$f.CancelButton = $c',
     '$f.Controls.AddRange(@($l, $t, $ok, $c))',
     '$f.Add_Shown({ $f.Activate(); $t.Focus() })',
-    "if ($f.ShowDialog() -eq 'OK') { [Console]::Out.Write($t.Text); exit 0 } else { exit 1 }"
+    '$answer = $f.ShowDialog()',
+    '} catch { exit 3 }',
+    "if ($answer -eq 'OK') { [Console]::Out.Write($t.Text); exit 0 } else { exit 2 }"
   ].join('\n')
 }
 
@@ -65,15 +70,20 @@ export function classify (platform, { status, stdout = '', stderr = '', error } 
   if (error) return { status: 'unavailable' }
   if (status === 0) return { status: 'ok', value: String(stdout).trim() }
   if (platform === 'darwin' && /\(-128\)/.test(stderr)) return { status: 'cancel' }
-  if (platform === 'win32' && status === 1) return { status: 'cancel' }
+  if (platform === 'win32' && status === 2) return { status: 'cancel' }
   return { status: 'unavailable' }
 }
+
+// windowsHide would set SW_HIDE for the child, and Windows applies that to the
+// first window powershell shows - the form. The child shares our console, so
+// nothing extra flashes up.
+export const SPAWN_OPTIONS = Object.freeze({ stdio: ['ignore', 'pipe', 'pipe'], windowsHide: false })
 
 function runProcess ({ file, args }) {
   return new Promise((resolve) => {
     let stdout = ''
     let stderr = ''
-    const child = spawn(file, args, { stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true })
+    const child = spawn(file, args, SPAWN_OPTIONS)
     child.stdout.on('data', (d) => { stdout += d })
     child.stderr.on('data', (d) => { stderr += d })
     child.on('error', (error) => resolve({ error }))
