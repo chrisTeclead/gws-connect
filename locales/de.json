@@ -44,7 +44,14 @@
     "imported": "Zugangsdaten gespeichert als \"{label}\".",
     "already": "Zugangsdaten \"{label}\" liegen schon vor.",
     "code_discarded": "Der Code wird nicht gespeichert und ist jetzt verbraucht.",
-    "next": "Naechster Schritt: Konto hinzufuegen."
+    "next": "Naechster Schritt: Konto hinzufuegen.",
+    "dialog_title": "gws-connect – Einrichtung",
+    "dialog_opening": "Ein Fenster fragt jetzt nach dem Einrichtungs-Code.",
+    "dialog_prompt": "Bitte den Einrichtungs-Code aus dem Passwortmanager einfügen und auf OK klicken.",
+    "dialog_retry": "Bitte den Code noch einmal vollständig kopieren – vom Anfang bis zum letzten Zeichen.",
+    "dialog_cancel": "Abbrechen",
+    "dialog_unavailable": "Das Eingabefenster konnte nicht geöffnet werden.",
+    "dialog_gave_up": "Drei Versuche ohne gültigen Code. Bitte beim Absender einen neuen Code anfordern."
   },
   "add": {
     "title": "Konto hinzufuegen",

@@ -45,7 +45,14 @@
     "imported": "Credentials stored as \"{label}\".",
     "already": "Credentials \"{label}\" are already present.",
     "code_discarded": "The code is not stored and is now used up.",
-    "next": "Next step: add an account."
+    "next": "Next step: add an account.",
+    "dialog_title": "gws-connect – setup",
+    "dialog_opening": "A window now asks for the setup code.",
+    "dialog_prompt": "Please paste the setup code from the password manager and click OK.",
+    "dialog_retry": "Please copy the code again, completely – from the start to the very last character.",
+    "dialog_cancel": "Cancel",
+    "dialog_unavailable": "The input window could not be opened.",
+    "dialog_gave_up": "Three tries without a valid code. Please ask the sender for a new one."
   },
   "add": {
     "title": "Add an account",

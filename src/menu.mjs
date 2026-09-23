@@ -124,6 +124,7 @@ function help () {
   ui.line(`  gws-connect                       ${t('menu.title')}`)
   ui.line(`  gws-connect setup                 ${t('menu.setup')}`)
   ui.line(`  gws-connect setup --code <code>   ${t('menu.setup')}`)
+  ui.line(`  gws-connect setup --dialog        ${t('menu.setup')}`)
   ui.line(`  gws-connect add <email>           ${t('menu.add')}`)
   ui.line(`  gws-connect list                  ${t('menu.list')}`)
   ui.line(`  gws-connect verify [<email>]      ${t('menu.verify')}`)
@@ -156,10 +157,16 @@ export async function main (argv) {
       await menu()
       return 0
 
-    case 'setup':
-      return await setupCommand({
-        code: typeof flags.code === 'string' ? flags.code : undefined
-      }) ? 0 : 1
+    case 'setup': {
+      const r = await setupCommand({
+        code: typeof flags.code === 'string' ? flags.code : undefined,
+        dialog: Boolean(flags.dialog)
+      })
+      // 3 tells a caller such as Claude that no window could be shown, which
+      // needs a different next step than a refused code.
+      if (r === 'unavailable') return 3
+      return r ? 0 : 1
+    }
 
     case 'add': {
       const meta = await addCommand({
