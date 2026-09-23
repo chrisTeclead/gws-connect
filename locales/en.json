@@ -34,7 +34,8 @@
     "unknown_choice": "Unknown choice.",
     "yes_flag": "--yes: ask nothing, take the defaults (for scripts)",
     "setup": "Enter the setup code",
-    "setup_hint": "one-time, no account can be connected without it"
+    "setup_hint": "one-time, no account can be connected without it",
+    "relink": "Repair account launchers after an update"
   },
   "setup": {
     "title": "Setup",
@@ -173,5 +174,8 @@
     "gmail_api": "Gmail API",
     "drive_api": "Google Drive API",
     "calendar_api": "Google Calendar API"
+  },
+  "relink": {
+    "done": "{count} account launcher(s) rewritten."
   }
 }

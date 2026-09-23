@@ -10,6 +10,7 @@ import { verifyCommand } from './commands/verify.mjs'
 import { removeCommand } from './commands/remove.mjs'
 import { doctorCommand } from './commands/doctor.mjs'
 import { credsetsCommand } from './commands/credsets.mjs'
+import { relinkCommand } from './commands/relink.mjs'
 
 export function parseArgs (argv) {
   const flags = {}
@@ -129,6 +130,7 @@ function help () {
   ui.line(`  gws-connect remove <email>        ${t('menu.remove')}`)
   ui.line(`  gws-connect doctor                ${t('menu.doctor')}`)
   ui.line(`  gws-connect credentials           ${t('menu.credsets')}`)
+  ui.line(`  gws-connect relink                ${t('menu.relink')}`)
   ui.line(`  gws-connect --lang de|en          ${t('menu.lang')}`)
   ui.blank()
   ui.dim(t('menu.yes_flag'))
@@ -193,6 +195,10 @@ export async function main (argv) {
         code: typeof flags.code === 'string' ? flags.code : undefined,
         interactive
       }) ? 0 : 1
+
+    case 'relink':
+      await relinkCommand()
+      return 0
 
     default:
       ui.fail(t('menu.unknown_choice'))
