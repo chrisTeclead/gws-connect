@@ -85,8 +85,14 @@ test('a wrapper pins the bundled gws when one is in use', async () => {
   const bin = String.raw`C:\bundle\runtime\gws\gws.exe`
   process.env.GWS_CONNECT_GWS_BIN = bin
   const w = await load()
-  const body = await fs.readFile(await w.write('anna-a-de'), 'utf8')
-  assert.ok(body.includes(`set "GWS_CONNECT_GWS_BIN=${bin}"`), body)
+  const file = await w.write('anna-a-de')
+  const body = await fs.readFile(file, 'utf8')
+  // Written relative to the wrapper where possible; what matters is where it
+  // points once cmd expands %~dp0 to the wrapper's own folder.
+  const set = body.match(/^set "GWS_CONNECT_GWS_BIN=(.*)"$/m)
+  assert.ok(set, body)
+  const expanded = set[1].replace('%~dp0', path.win32.dirname(file) + '\\')
+  assert.equal(path.win32.resolve(expanded).toLowerCase(), bin.toLowerCase())
   delete process.env.GWS_CONNECT_GWS_BIN
   delete process.env.GWS_CONNECT_PLATFORM
   await box.cleanup()
@@ -113,4 +119,36 @@ test('a wrapper stays clean when gws comes from the PATH', async () => {
   assert.ok(!body.includes('GWS_CONNECT_GWS_BIN'))
   delete process.env.GWS_CONNECT_PLATFORM
   await box.cleanup()
+})
+
+// cmd.exe reads a batch file in the OEM codepage; a UTF-8 "ü" in an absolute
+// path turns into garbage and the account stops working.
+const win = (...parts) => parts.join('\\')
+const ANNA = win('C:', 'Users', 'Anna Müller', '.gws-connect')
+
+test('a Windows wrapper reaches an umlaut home through %~dp0, in pure ASCII', async () => {
+  const w = await load()
+  const body = w.windowsBody('anna-a-de', {
+    from: win(ANNA, 'bin'),
+    node: win(ANNA, 'app', 'runtime', 'node', 'node.exe'),
+    runner: win(ANNA, 'app', 'bin', 'gws-run.mjs'),
+    gws: win(ANNA, 'app', 'runtime', 'gws', 'gws.exe')
+  })
+  assert.match(body, /^[\x00-\x7f]*$/, 'no byte cmd.exe could misread')
+  const node = `%~dp0${win('..', 'app', 'runtime', 'node', 'node.exe')}`
+  const runner = `%~dp0${win('..', 'app', 'bin', 'gws-run.mjs')}`
+  assert.ok(body.includes(`"${node}" "${runner}" "anna-a-de" -- %*`))
+  assert.ok(body.includes(`set "GWS_CONNECT_GWS_BIN=%~dp0${win('..', 'app', 'runtime', 'gws', 'gws.exe')}"`))
+})
+
+test('a Windows wrapper keeps an absolute path it cannot express relatively', async () => {
+  const w = await load()
+  const body = w.windowsBody('a-b-de', {
+    from: win(ANNA, 'bin'),
+    node: win('D:', 'tools', 'node.exe'),
+    runner: win(ANNA, 'app', 'bin', 'gws-run.mjs'),
+    gws: ''
+  })
+  assert.ok(body.includes(`"${win('D:', 'tools', 'node.exe')}" "%~dp0${win('..', 'app', 'bin', 'gws-run.mjs')}"`))
+  assert.ok(!body.includes('GWS_CONNECT_GWS_BIN'))
 })
