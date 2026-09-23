@@ -56,3 +56,16 @@ The wrapper pins that one account. It cannot accidentally answer for another.
 - **`verifiedAt: null` on an old account is worth mentioning.** It means the
   access has never been confirmed past Google's 7-day cutoff, so a failure may
   be a configuration problem rather than an empty result.
+
+## Connect another account
+
+If the user wants one more account, use the installed launcher — macOS
+`~/.gws-connect/gws-connect`, Windows `%USERPROFILE%\.gws-connect\gws-connect.cmd`:
+
+    <launcher> add <address> --yes
+
+Before running it, tell them: sign out of Google in the browser first, pick
+exactly that address, and continue past "Google hasn't verified this app" via
+Advanced → Go to … . If the launcher does not exist, gws-connect was set up
+from a folder rather than installed; ask the user to paste the install sentence
+from their guide again.

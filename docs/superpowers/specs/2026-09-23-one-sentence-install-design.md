@@ -150,10 +150,11 @@ den Ordner verschoben hat.
 
 Neue Option. Statt `ui.ask()` öffnet gws-connect ein natives Eingabefenster:
 
-- **macOS:** `osascript` mit `display dialog "…" default answer "" with hidden answer`.
-- **Windows:** `powershell -NoProfile -Command -` mit einem WinForms-Formular, Feld
-  mit `UseSystemPasswordChar`. Das Skript kommt über **stdin**, nicht über die
-  Kommandozeile.
+- **macOS:** `osascript` mit `display dialog "…" default answer "" with hidden answer`
+  (Skript per `-e`).
+- **Windows:** `powershell -NoProfile -STA -EncodedCommand …` mit einem
+  WinForms-Formular, Feld mit `UseSystemPasswordChar`. Das Skript kommt als
+  `-EncodedCommand`; es enthält nur die Fenstertexte, nie den Code.
 
 Der Code kommt über die **Standardausgabe des Kindprozesses** zurück zu
 gws-connect — nie über eine Kommandozeile, nie in eine Datei, nie in die Ausgabe von
@@ -210,7 +211,7 @@ mit den Skripten übereinstimmen.
 |---|---|
 | ZIP-Pakete | bleiben, als Rohmaterial für die Installer und als Offline-Weg |
 | `START-HIER.cmd/.command` im Paket | bleibt für den Offline-Weg |
-| Paket-`CLAUDE.md` | bleibt, verweist aber auf `INSTALL.md`-Inhalte (eine Quelle, siehe 4.6) |
+| Paket-`CLAUDE.md` | bleibt für den Offline-Weg, nutzt jetzt `setup --dialog` und nennt `relink` |
 | `Start-Mac.command`, `Start-Windows.cmd` im Repo-Wurzelverzeichnis | bleiben für Entwickler mit eigenem Node |
 | `env.installGws()` (Installation über brew/npm) | bleibt; im installierten Stand greift es nie, weil `GWS_CONNECT_GWS_BIN` gesetzt ist |
 

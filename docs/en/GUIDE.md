@@ -1,7 +1,7 @@
 # Guide — connecting Google accounts
 
-For you, if you were handed this folder and a **setup code**.
-About 5 minutes for the program, then 2 minutes per account.
+For you, if you were handed a **sentence for Claude** and a **setup code**.
+About 5 minutes for the setup, then 2 minutes per account.
 
 You do **not** create a Google Cloud project and you do **not** type any credentials. That
 part is already prepared.
@@ -19,72 +19,57 @@ own separate store; no account can accidentally answer for another.
 
 ---
 
-## Step 1 — Node.js
+## Step 1 — ask Claude
 
-If you do not know whether you have Node.js: just carry on, the program will tell you.
+Open Claude (Claude Code, or the Code tab in Claude Desktop) and paste this
+sentence:
 
-If it is missing, get it here: **[nodejs.org](https://nodejs.org)** → the **LTS** version.
-Install it, close the window, continue with step 2.
+> Please install gws-connect for me:
+> https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md
 
----
-
-## Step 2 — start the program
-
-- **Mac:** double-click `Start-Mac.command`
-- **Windows:** double-click `Start-Windows.cmd`
-
-> **Mac, first time:** macOS may complain about an "unidentified developer". Right-click the
-> file → **Open** → **Open**. Only needed once.
-
-The program checks your environment and sets up what is missing, if you agree.
+Claude installs everything by itself. You do not need to install Node or
+anything else, and you get no security warning.
 
 ---
 
-## Step 3 — paste the setup code
+## Step 2 — paste the setup code
 
-You will receive a long line starting with `GWSC1.`. It comes through a password manager,
-not by email.
+A small window appears: **"Please paste the setup code…"**. Paste the code
+from your password manager (a long line starting with `GWSC1.`) and click
+**OK**.
 
-On the first start the program asks by itself: **Setup code:** → paste → Enter.
-Later, any time, via menu item **6 (Enter the setup code)**.
-
-From a terminal it also works directly:
-
-```bash
-node bin/gws-connect.mjs setup
-```
-
-- **The code is like a password.** Do not forward it, do not paste it into a chat.
+- **The code is like a password.** Paste it only into that window — never into
+  the chat with Claude.
 - After importing, it is not stored; it is used up.
-- If you get a message about a wrong **checksum**, the code was cut off while copying. Copy
-  it again in full — from `GWSC1.` to the very last character.
+- If the window says the code is incomplete: copy it again in full, from the
+  start to the very last character.
 
 ---
 
-## Step 4 — add accounts
+## Step 3 — add accounts
 
-Menu item **1 (Add an account)**, as often as you like — once per account.
+Claude asks for your email address and opens the browser. Once per account, as often as
+you like.
 
 For each account:
 
-1. Enter the **email address**.
-2. The program tells you what happens next. Read it, it is two sentences.
-3. **Sign out of Google in your browser first.** Otherwise Google silently takes whichever
+1. Give the **email address**.
+2. **Sign out of Google in your browser first.** Otherwise Google silently takes whichever
    account you are currently signed in as. The program detects this and refuses, but
    starting signed out saves you the round trip.
-4. The browser opens. **Pick exactly the address you entered** — use "Use another account"
+3. The browser opens. **Pick exactly the address you gave** — use "Use another account"
    if needed.
-5. You will see: **"Google hasn't verified this app."**
+4. You will see: **"Google hasn't verified this app."**
    **That is expected here.** Continue via **Advanced → Go to …**. Do not cancel.
-6. Grant consent. The list shows three permissions, all of them "view" / read.
-7. The program then checks for itself **which account actually answered**. If it does not
+5. Grant consent. The list shows three permissions, all of them "view" / read.
+6. The program then checks for itself **which account actually answered**. If it does not
    match, the connection is dropped immediately and you are told what happened.
 
-Done. Repeat for every further account.
+Done. For every further account just tell Claude: "Connect my account … as well".
 
 ---
 
-## Step 5 — check once after 8 days
+## Step 4 — check once after 8 days
 
 The program reminds you by itself. When the reminder appears: say **yes**.
 
@@ -97,18 +82,37 @@ that the program stops asking.
 
 ## What you have afterwards
 
-One command per account under `~/.gws-connect/bin/`. Claude uses it to read in that one
-account.
+Everything lives under `~/.gws-connect/` in your user folder. There is one command per
+account under `bin/`; Claude uses it to read in that one account.
 
-Menu item **2 (Overview)** shows what is connected.
-Menu item **3 (Check access)** really asks Google.
-Menu item **4 (Remove an account)** revokes consent at Google and deletes everything.
+Just ask Claude about your mail, files and appointments.
+
+The menu with the overview, the access check and "Remove an account" starts with
+`~/.gws-connect/gws-connect` (Mac) or `%USERPROFILE%\.gws-connect\gws-connect.cmd`
+(Windows) — or ask Claude to open it.
+
+---
+
+## Updating
+
+Paste the same sentence from step 1 into Claude again. Your accounts are kept.
+
+---
+
+## Without Claude
+
+Open **Terminal** (Mac) or **PowerShell** (Windows), paste the one line for
+your system from
+[INSTALL.md](https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md),
+press Enter. Then start `~/.gws-connect/gws-connect` (Mac) or
+`%USERPROFILE%\.gws-connect\gws-connect.cmd` (Windows) — the menu asks for the
+setup code first.
 
 ---
 
 ## If something does not work
 
-First menu item **5 (Check environment)** — it says concretely what is missing.
+First the menu's **Check environment** — it says concretely what is missing.
 Then [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 And: **do not guess and do not change anything else.** A wrongly set switch only shows up

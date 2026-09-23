@@ -105,7 +105,7 @@ use the tool themselves afterwards.
 1. Run the doctor first and read what it reports:
    \`${node} bin/gws-connect.mjs doctor\`
 2. If the doctor is happy, run the setup:
-   \`${node} bin/gws-connect.mjs setup\`
+   \`${node} bin/gws-connect.mjs setup --dialog\`
 3. Then add the user's account:
    \`${node} bin/gws-connect.mjs add <address>\`
 
@@ -122,14 +122,18 @@ line or in a log, and never store it anywhere in this folder. If the user pastes
 it into the chat instead of the prompt, tell them plainly that it should be
 rotated.
 
-What you SHOULD do is give them the prompt without making them hunt for it.
-Open the starter in a terminal window of its own:
+A window of its own asks for the code; tell the user to paste it there and
+click OK. If the command ends with exit code 3, no window could be shown -
+then open the starter in a terminal window instead:
 
     ${openStarter}
 
-A window appears asking for the setup code. Tell the user to paste it there —
-${paste} — and press Enter. Then stay available: once the code is in, they can
-come back and you can carry on with step 3.
+and tell them to paste the code there — ${paste} — and press Enter. Then stay
+available: once the code is in, they can come back and you can carry on with
+step 3.
+
+If the user moved this folder after connecting accounts, run
+\`${node} bin/gws-connect.mjs relink\` once; it repairs the account launchers.
 
 ## When something fails
 

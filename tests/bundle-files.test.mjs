@@ -70,3 +70,10 @@ test('the terminal window is offered for the code prompt, not for the doctor', (
   const codeAt = md.indexOf('## The setup code')
   assert.ok(openAt > codeAt, 'the window belongs with the step that needs a keyboard')
 })
+
+test('the bundle CLAUDE.md prefers the setup popup and knows about relink', () => {
+  const md = files.claudeMd('mac-arm64')
+  assert.match(md, /setup --dialog/)
+  assert.match(md, /exit code 3/i)
+  assert.match(md, /relink/)
+})

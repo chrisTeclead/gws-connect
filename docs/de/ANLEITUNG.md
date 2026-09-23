@@ -1,7 +1,7 @@
 # Anleitung — Google-Konten verbinden
 
-Für dich, wenn du den Ordner und einen **Einrichtungs-Code** bekommen hast.
-Dauer: etwa 5 Minuten für das Programm, dann 2 Minuten pro Konto.
+Für dich, wenn du einen **Satz für Claude** und einen **Einrichtungs-Code** bekommen hast.
+Dauer: etwa 5 Minuten für die Einrichtung, dann 2 Minuten pro Konto.
 
 Du legst **kein** Google-Cloud-Projekt an und tippst **keine** Zugangsdaten ein. Das ist
 schon vorbereitet.
@@ -20,73 +20,58 @@ kann versehentlich für ein anderes antworten.
 
 ---
 
-## Schritt 1 — Node.js
+## Schritt 1 — Claude fragen
 
-Wenn du nicht weißt, ob du Node.js hast: einfach weitermachen, das Programm sagt es dir.
+Öffne Claude (Claude Code oder den Code-Bereich in Claude Desktop) und füge diesen Satz
+ein:
 
-Fehlt es, hol es hier: **[nodejs.org](https://nodejs.org)** → die **LTS**-Version.
-Installieren, Fenster schließen, weiter mit Schritt 2.
+> Bitte installiere gws-connect für mich:
+> https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md
 
----
-
-## Schritt 2 — Programm starten
-
-- **Mac:** `Start-Mac.command` doppelklicken
-- **Windows:** `Start-Windows.cmd` doppelklicken
-
-> **Mac, beim ersten Mal:** macOS meldet vielleicht „nicht verifizierter Entwickler".
-> Dann Rechtsklick auf die Datei → **Öffnen** → **Öffnen**. Nur einmal nötig.
-
-Das Programm prüft die Umgebung und richtet fehlende Teile ein, wenn du zustimmst.
+Claude installiert alles selbst. Du musst weder Node.js noch sonst etwas installieren,
+und es erscheint keine Sicherheitswarnung.
 
 ---
 
-## Schritt 3 — Einrichtungs-Code einfügen
+## Schritt 2 — Einrichtungs-Code einfügen
 
-Du bekommst eine lange Zeile, die mit `GWSC1.` beginnt. Sie kommt über einen
-Passwortmanager, nicht per Mail.
+Ein kleines Fenster erscheint: **„Bitte den Einrichtungs-Code … einfügen"**. Füge den
+Code aus dem Passwortmanager ein (eine lange Zeile, die mit `GWSC1.` beginnt) und klicke
+auf **OK**.
 
-Beim ersten Start fragt das Programm von selbst danach: **Einrichtungs-Code:** →
-einfügen → Enter. Später jederzeit über Menüpunkt **6 (Einrichtungs-Code eingeben)**.
-
-Im Terminal geht es auch direkt:
-
-```bash
-node bin/gws-connect.mjs setup
-```
-
-- **Der Code ist wie ein Passwort.** Nicht weiterschicken, nicht in einen Chat kopieren.
+- **Der Code ist wie ein Passwort.** Füge ihn nur in dieses Fenster ein — niemals in den
+  Chat mit Claude.
 - Nach dem Einfügen wird er nicht gespeichert; er ist verbraucht.
-- Wenn eine Meldung über eine falsche **Prüfsumme** kommt: der Code ist beim Kopieren
-  abgeschnitten worden. Nochmal komplett kopieren — von `GWSC1.` bis zum letzten Zeichen.
+- Sagt das Fenster, der Code sei unvollständig: nochmal komplett kopieren — vom Anfang
+  bis zum letzten Zeichen.
 
 ---
 
-## Schritt 4 — Konten hinzufügen
+## Schritt 3 — Konten hinzufügen
 
-Menüpunkt **1 (Konto hinzufügen)**, so oft du willst — einmal pro Konto.
+Claude fragt dich nach deiner E-Mail-Adresse und öffnet den Browser. Einmal pro Konto,
+so oft du willst.
 
 Pro Konto:
 
-1. **E-Mail-Adresse** eingeben.
-2. Das Programm sagt dir, was jetzt kommt. Lies das, es sind zwei Sätze.
-3. **Vorher im Browser bei Google abmelden.** Sonst nimmt Google stillschweigend das
+1. **E-Mail-Adresse** nennen.
+2. **Vorher im Browser bei Google abmelden.** Sonst nimmt Google stillschweigend das
    Konto, mit dem du gerade angemeldet bist. Das Programm merkt es und lehnt ab, aber
    abgemeldet zu starten spart dir die Runde.
-4. Der Browser öffnet sich. **Genau die Adresse auswählen**, die du eingegeben hast —
+3. Der Browser öffnet sich. **Genau die Adresse auswählen**, die du genannt hast —
    notfalls über „Anderes Konto verwenden".
-5. Es erscheint: **„Google hat diese App nicht verifiziert."**
+4. Es erscheint: **„Google hat diese App nicht verifiziert."**
    **Das ist hier normal und eingeplant.** Über **Erweitert → Weiter zu …** fortfahren.
    Nicht abbrechen.
-6. Zustimmen. Die Liste zeigt drei Berechtigungen, alle mit „ansehen" / „read".
-7. Das Programm prüft danach selbst, **welches Konto tatsächlich geantwortet hat**.
+5. Zustimmen. Die Liste zeigt drei Berechtigungen, alle mit „ansehen" / „read".
+6. Das Programm prüft danach selbst, **welches Konto tatsächlich geantwortet hat**.
    Passt es nicht, wird die Verbindung sofort wieder gelöst und dir gesagt, was los war.
 
-Fertig. Wiederhole das für jedes weitere Konto.
+Fertig. Für jedes weitere Konto sag Claude einfach: „Verbinde noch mein Konto …".
 
 ---
 
-## Schritt 5 — nach 8 Tagen einmal prüfen
+## Schritt 4 — nach 8 Tagen einmal prüfen
 
 Das Programm erinnert dich von selbst daran. Wenn der Hinweis kommt: **ja** sagen.
 
@@ -99,18 +84,38 @@ es hält. Danach fragt das Programm nicht mehr.
 
 ## Was du danach hast
 
-Pro Konto einen Befehl unter `~/.gws-connect/bin/`. Claude nutzt den, um in genau diesem
-Konto zu lesen.
+Alles liegt unter `~/.gws-connect/` in deinem Benutzerordner. Pro Konto gibt es dort
+einen Befehl unter `bin/`; Claude nutzt ihn, um in genau diesem Konto zu lesen.
 
-Menüpunkt **2 (Übersicht)** zeigt jederzeit, was verbunden ist.
-Menüpunkt **3 (Zugang prüfen)** fragt wirklich bei Google nach.
-Menüpunkt **4 (Konto entfernen)** zieht die Zustimmung bei Google zurück und löscht alles.
+Frag Claude einfach nach deinen Mails, Dateien und Terminen.
+
+Das Menü mit Übersicht, Zugangsprüfung und „Konto entfernen" startest du mit
+`~/.gws-connect/gws-connect` (Mac) bzw. `%USERPROFILE%\.gws-connect\gws-connect.cmd`
+(Windows) — oder du bittest Claude darum.
+
+---
+
+## Aktualisieren
+
+Denselben Satz aus Schritt 1 noch einmal in Claude einfügen. Deine Konten bleiben
+erhalten.
+
+---
+
+## Ohne Claude
+
+Öffne **Terminal** (Mac) bzw. **PowerShell** (Windows), füge die eine Zeile für dein
+System aus
+[INSTALL.md](https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md)
+ein und drücke Enter. Starte danach `~/.gws-connect/gws-connect` (Mac) bzw.
+`%USERPROFILE%\.gws-connect\gws-connect.cmd` (Windows) — das Menü fragt zuerst nach dem
+Einrichtungs-Code.
 
 ---
 
 ## Wenn etwas nicht geht
 
-Erst Menüpunkt **5 (Umgebung prüfen)** — der sagt konkret, was fehlt.
+Erst im Menü **Umgebung prüfen** — der Punkt sagt konkret, was fehlt.
 Dann [PROBLEME.md](PROBLEME.md).
 
 Und: **nichts raten und nichts anderes umstellen.** Ein falsch gesetzter Schalter fällt

@@ -19,7 +19,7 @@ Für Nicht-Techniker gebaut: einen Einrichtungs-Code einfügen, Konten hinzufüg
 | **Deutsch** | [docs/de/ANLEITUNG.md](docs/de/ANLEITUNG.md) |
 | **English** | [docs/en/GUIDE.md](docs/en/GUIDE.md) |
 
-Then double-click `Start-Mac.command` (macOS) or `Start-Windows.cmd` (Windows).
+Then paste one sentence into Claude — the guide says which.
 
 ---
 
@@ -41,6 +41,32 @@ node tools/make-setup-code.mjs \
 The code is a secret — share it through a password manager, never by email. This repository
 contains none.
 
+### What to send
+
+Two messages, two channels. The first one is harmless:
+
+> **DE:** Öffne Claude und füge diesen Satz ein:
+> „Bitte installiere gws-connect für mich: https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md"
+> Wenn ein Fenster nach dem Einrichtungs-Code fragt: den Code aus dem Passwortmanager einfügen.
+>
+> **EN:** Open Claude and paste this sentence:
+> "Please install gws-connect for me: https://github.com/chrisTeclead/gws-connect/releases/latest/download/INSTALL.md"
+> When a window asks for the setup code: paste the code from the password manager.
+
+The second one is the setup code — through the password manager.
+
+### Publishing a release
+
+```bash
+# bump "version" in package.json first
+git tag v0.2.0 && git push origin v0.2.0
+```
+
+The workflow tests, builds all three bundles, installs each one on a real
+macOS (Apple Silicon and Intel) and Windows runner, and publishes only if all
+of that passes. Before the very first public release, make the repository
+public and check its history for pasted codes: `git log -p | grep GWSC1.`
+
 ---
 
 ## Commands
@@ -48,6 +74,8 @@ contains none.
 ```
 gws-connect                       interactive menu
 gws-connect setup --code <code>   import credentials
+gws-connect setup --dialog        import credentials through a native window
+gws-connect relink                repair account launchers after an update
 gws-connect add <email>           connect one account
 gws-connect list                  overview
 gws-connect verify [<email>]      really ask Google
