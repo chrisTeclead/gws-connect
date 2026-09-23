@@ -1,0 +1,66 @@
+# Tag vX.Y.Z (matching package.json) to publish. Run by hand to test
+# everything without publishing.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - name: tag matches package.json
+        if: startsWith(github.ref, 'refs/tags/')
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+      - run: node tools/make-bundle.mjs --all
+      - run: cp install/install.sh install/install.ps1 install/INSTALL.md dist/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  # The only place the Mac bundles run on a real Mac before anyone gets them.
+  install-check:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - if: runner.os == 'macOS'
+        run: bash tools/ci/install-check.sh dist
+      - if: runner.os == 'Windows'
+        shell: powershell
+        run: '& ./tools/ci/install-check.ps1 dist; if (-not $?) { exit 1 }'
+
+  publish:
+    needs: install-check
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME" dist/*
+          --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME"
+          --notes "Install: paste into Claude - Bitte installiere gws-connect für mich: https://github.com/$GITHUB_REPOSITORY/releases/latest/download/INSTALL.md"
